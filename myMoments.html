@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>朋友圈</title>
+</head>
+<link rel="stylesheet" type="text/css" href="./css/index.css">
+<link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="./css/bootstrap-theme.css">
+<link rel="stylesheet" type="text/css" href="./css/dropload.min.css">
+
+<body>
+    <div class="inner">
+        <div id="scroller-content">
+            <div id="show-container">
+                <div class="header">
+                    <div class="backBtn" id="backBtn">
+                        <img src="./css/rtn.png" class="backBtn-pic">
+                    </div>
+                    <div class="title">朋友圈</div>
+                </div>
+                <div class="head-pic-wrap">
+                    <img src="" class="head-pic" id="head-pic">
+                    <div class="my-potrait-wrap">
+                        <img src="./css/defaulthead.png" class="my-potrait-pic" id="my-potrait-pic">
+                    </div>
+                    <div class="my-name-wrap" id="myName"></div>
+                </div>
+                <div id="main-container">
+                </div>
+                <div class="no-content" id="no-content">没有动态</div>
+                <div class="loadBtn" id="loadBtn">加载更多</div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./libs/jquery.min.js"></script>
+<script src="./libs/json.js"></script>
+<script src="./libs/iscroll.js"></script>
+<script src="./libs/underscore.js"></script>
+<script src="./libs/bootstrap.min.js"></script>
+<script src="myMoments.js"></script>
+<script src="./libs/dropload.min.js"></script>
+<script type="text/javascript">
+// dropload
+var dropload = $('.inner').dropload({
+    domUp: {
+        domClass: 'dropload-up',
+        domRefresh: '<div class="dropload-refresh">↓下拉刷新</div>',
+        domUpdate: '<div class="dropload-update">↑释放更新</div>',
+        domLoad: '<div class="dropload-load"><span class="loading"></span>加载中...</div>'
+    },
+    loadUpFn: function(me) {
+        setTimeout(function() {
+            window.location.reload();
+        }, 1000);
+    }
+});
+</script>
+
+</html>

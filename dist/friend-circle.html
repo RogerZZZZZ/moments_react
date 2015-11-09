@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>朋友圈</title>
+</head>
+<link rel="stylesheet" type="text/css" href="./css/index.css">
+<link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="./css/bootstrap-theme.css">
+<link rel="stylesheet" type="text/css" href="./css/iscroll.css">
+<link rel="stylesheet" type="text/css" href="./css/webloader.css">
+<link rel="stylesheet" type="text/css" href="./css/demo.css">
+
+<body onload="loaded()">
+    <div id="wrapper">
+        <div id="scroller">
+            <div id="scroller-pullDown">
+                <span id="down-icon" class="icon-double-angle-down pull-down-icon"></span>
+                <span id="pullDown-msg" class="pull-down-msg">下拉刷新</span>
+            </div>
+            <div id="scroller-content">
+                <div id="show-container">
+                    <div class="header">
+                        <div class="title">朋友圈</div>
+                        <div class="newTwitterBtn" id="newTwitterBtn">
+                            <img src="./css/add.png" class="addBtn-pic">
+                        </div>
+                    </div>
+                    <div class="head-pic-wrap">
+                        <img src="" class="head-pic" id="head-pic">
+                        <div class="my-potrait-wrap">
+                            <img src="./css/defaulthead.png" class="my-potrait-pic" id="my-potrait-pic">
+                        </div>
+                        <div class="my-name-wrap" id="myName"></div>
+                    </div>
+                    <div id="main-container">
+                    </div>
+                    <div class="no-content" id="no-content">没有动态</div>
+                </div>
+            </div>
+            <div class="loadBtn" id="loadBtn">加载更多</div>
+        </div>
+    </div>
+    <div id="newTwitter-container">
+        <div class="header">
+            <div class="title">朋友圈</div>
+            <div class="backBtn" id="backBtn">
+                <img src="./css/rtn.png" class="backBtn-pic">
+            </div>
+            <div class="uploadBtn" id="submitBtn-new">发布</div>
+        </div>
+        <div id="content-wrap-new">
+            <center>
+                <textarea class="twitter-content" id="twitterInput"></textarea>
+            </center>
+        </div>
+    </div>
+    <div id="post-container" class="container">
+        <div class="page-container">
+            <div id="uploader" class="wu-example">
+                <div class="queueList">
+                    <div id="dndArea" class="placeholder">
+                        <div id="filePicker"></div>
+                    </div>
+                </div>
+                <div class="statusBar" style="display:none;">
+                    <div class="progress">
+                        <span class="text">0%</span>
+                        <span class="percentage"></span>
+                    </div>
+                    <div class="info"></div>
+                    <div class="btns">
+                        <div id="filePicker2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./libs/jquery.min.js"></script>
+<script src="./libs/json.js"></script>
+<script src="./libs/iscroll.js"></script>
+<script src="./libs/underscore.js"></script>
+<script src="twitter.js"></script>
+<script src="./libs/bootstrap.min.js"></script>
+<script src="./libs/webuploader.js"></script>
+<script src="./libs/pic-upload.js"></script>
+<script type="text/javascript">
+function loaded() {
+    var myScroll,
+        upIcon = $("#up-icon"),
+        downIcon = $("#down-icon");
+
+    myScroll = new IScroll('#wrapper', {
+        probeType: 3,
+        mouseWheel: true,
+        preventDefault: false
+    });
+
+    myScroll.on("scroll", function() {
+        var y = this.y,
+            maxY = this.maxScrollY - y,
+            downHasClass = downIcon.hasClass("reverse_icon"),
+            upHasClass = upIcon.hasClass("reverse_icon");
+
+        if (y >= 40) {
+            !downHasClass && downIcon.addClass("reverse_icon");
+            return "";
+        } else if (y < 40 && y > 0) {
+            downHasClass && downIcon.removeClass("reverse_icon");
+            return "";
+        }
+    });
+
+    myScroll.on("slideDown", function() {
+        if (this.y > 40) {
+            window.location.reload();
+            upIcon.removeClass("reverse_icon")
+        }
+    });
+}
+</script>
+</html>
