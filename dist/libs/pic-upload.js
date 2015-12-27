@@ -58,7 +58,7 @@ jQuery(function() {
         uploader;
 
     if (!WebUploader.Uploader.support()) {
-        // alert( 'Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器');
+        alert( 'Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器');
         throw new Error('WebUploader does not support the browser you are using.');
     }
 
@@ -84,10 +84,11 @@ jQuery(function() {
         disableGlobalDnd: true,
 
         chunked: true,
-        server: 'http://192.168.1.121:8080/moments/fileupload.php',
+        server: window.ipAddress + ':8080/avmoments/fileupload.php',
         fileNumLimit: 300,
-        fileSizeLimit: 10 * 1024 * 1024, // 200 M
-        fileSingleSizeLimit: 3 * 1024 * 1024 // 50 M
+        sendAsBinary: true,
+        fileSizeLimit: 100 * 1024 * 1024, // 200 M
+        fileSingleSizeLimit: 100 * 1024 * 1024 // 50 M
     });
 
     // 添加“添加文件”的按钮，
@@ -306,12 +307,14 @@ jQuery(function() {
                 stats = uploader.getStats();
                 if (stats.successNum) {
                     ajaxLoc({
-                        url: window.ipAddress + ':8080/moments/addmoments?username=' + window.username + '&time=' + (new Date()).getTime() + '&content=' + $('#twitterInput').val() + '&image=' + window.addFileSrc + '&tempimage=' + window.delteFileSrc,
+                        url: window.ipAddress + ':8080/avmoments/addmoments?username=' + window.username + '&time=' + (new Date()).getTime() + '&content=' + $('#twitterInput').val() + '&image=' + window.addFileSrc + '&tempimage=' + window.delteFileSrc,
                         success: function(rst) {
                             window.location.reload();
+                        },
+                        error: function(e){
+                            console.log(e);
                         }
                     });
-
                 } else {
                     // 没有成功的图片，重设
                     state = 'done';

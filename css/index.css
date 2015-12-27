@@ -1,67 +1,133 @@
-/*html{
-	position: relative;
+* {
+  tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
 }
 
-body{
-	position: relative;
-	font-family:'Microsoft YaHei';
-	margin: 0;
-	padding: 0;
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale
 }
-*/
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -o-box-sizing: content-box;
+  box-sizing: border-box
+}
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit
+}
+
+@media all and (min-width:640px) {
+  html {
+    font-size: 625%
+  }
+}
+@media all and (max-width:640px) {
+  html {
+    font-size: 625%
+  }
+}
+@media all and (max-width:604px) {
+  html {
+    font-size: 589.84375%
+  }
+}
+@media all and (max-width:600px) {
+  html {
+    font-size: 585.9375%
+  }
+}
+@media all and (max-width:540px) {
+  html {
+    font-size: 527.34375%
+  }
+}
+@media all and (max-width:534px) {
+  html {
+    font-size: 521.484375%
+  }
+}
+@media all and (max-width:480px) {
+  html {
+    font-size: 468.75%
+  }
+}
+@media all and (max-width:424px) {
+  html {
+    font-size: 414.0625%
+  }
+}
+@media all and (max-width:400px) {
+  html {
+    font-size: 390.625%
+  }
+}
+@media all and (max-width:384px) {
+  html {
+    font-size: 375%
+  }
+}
+@media all and (max-width:360px) {
+  html {
+    font-size: 341.5625%
+  }
+}
+@media all and (max-width:320px) {
+  html {
+    font-size: 312.5%
+  }
+}
+body {
+  font-family: Droid Sans, Droid Sans Fallback, Helvetica;
+  -webkit-user-select: none;
+  user-select: none;
+  -ms-touch-action: none
+}
+img {
+  width: 100%
+}
+
 .header{
 	position: relative;
-	height: 60px;
+	height: 1rem;
 	width: 100%;
 	background: #177EE5;
 }
 
-.header .refresh-wrap{
-	position: absolute;
-	width: 30px;
-	heihgt: 30px;
-	top: 15px;
-	left: 15px;
-}
-
-.refresh-wrap .refresh-pic{
-	position: absolute;
-	width: 100%;
-	heihgt: 100%;
-}
-
 .header .title{
-	line-height: 60px;
+	line-height: 1rem;
 	text-align: center;
 	position: relative;
 	width: 100%;
-	height: 60px;
-	font-size: 18px;
+	height: 1rem;
+	font-size: 0.4rem;
 	color: #fff;
 	display:inline-block;
 }
 
 .header .newTwitterBtn{
 	position: absolute;
-	width: 30px;
-	height: 30px;
-	top: 15px;
-	right: 15px;
+	width: .6rem;
+	height: .6rem;
+	top: .2rem;
+	right: .2rem;
 	z-index: 100;
 }
 
 .newTwitterBtn .addBtn-pic{
 	position: absolute;
 	width: 100%;
-	heihgt: 100%;
+	height: 100%;
 }
 
 .header .backBtn{
 	position: absolute;
-	width: 30px;
-	height: 30px;
-	top: 15px;
-	left: 15px;
+	width: .6rem;
+	height: .6rem;
+	top: .2rem;
+	left: .2rem;
 	z-index: 100;
 }
 
@@ -70,7 +136,6 @@ body{
 	width: 100%;
 	height: 100%;
 }
-
 
 #main-container{
 	position: relative;
@@ -84,7 +149,7 @@ body{
 
 .wrap{
 	position: relative;
-	width: 94%;
+	width: 6rem;
 	margin: 0 auto;
 	overflow: hidden;
 	padding-top: 20px;
@@ -93,30 +158,37 @@ body{
 
 .wrap .potrait-wrap{
 	position: relative;
-	width: 20%;
+	width: 1.2rem;
 	height: 100px;
 	float: left;
 }
 
 .potrait-wrap .potrait-pic{
 	position: relative;
-	width: 40px;
-	height: 40px;
+	width: 1rem;
+	height: 1rem;
 	margin: 0 auto;
 }
 
 .wrap .content-wrap{
 	position: relative;
-	width: 80%;
+	width: 4.8rem;
 	float: left;
 }
 
 .content-wrap .name-wrap{
-	font-size: 16px;
+	font-size: .32rem;
+  color: #235a81;
+}
+
+.delete-wrap{
+	font-size: .24rem;
+	margin-left: 5px;
+	color: #86B5DB;
 }
 
 .content-wrap .text-wrap{
-	font-size: 16px;
+	font-size: .3rem;
 	margin-top: 5px;
 	word-wrap: break-word;
 }
@@ -124,20 +196,19 @@ body{
 .content-wrap .tool-wrap{
 	position: relative;
 	margin-top: 5px;
-	
 }
 
 .content-wrap .tool-wrap .time-wrap{
-	font-size: 10px;
+	font-size: .24rem;
 	coloe: #e3e3e3;
 }
 
 .tool-wrap .favourBtn{
 	position: relative;
-	width: 40px;
-	height: 25px;
-	line-height: 25px;
-	font-size: 10px;
+	width: .8rem;
+	height: .4rem;
+	line-height: .4rem;
+	font-size: .24rem;
 	background: #db4549;
 	color: #fff;
 	float: right;
@@ -147,25 +218,24 @@ body{
 
 .tool-wrap .not-favourBtn{
 	position: relative;
-	width: 40px;
-	height: 25px;
-	line-height: 25px;
-	font-size: 10px;
+	width: .8rem;
+	height: .4rem;
+	line-height: .4rem;
+	font-size: .24rem;
 	border: 1px solid #000;
 	color: #000;
 	float: right;
 	text-align: center;
 	border-radius: 4px;
-
 }
 
 .tool-wrap .commentBtn{
 	position: relative;
 	right: 15px;
-	width: 40px;
-	height: 25px;
-	line-height: 25px;
-	font-size: 10px;
+	width: .8rem;
+	height: .4rem;
+	line-height: .4rem;
+	font-size: .24rem;
 	color: #000;
 	border: 1px solid #000;
 	float: right;
@@ -184,7 +254,7 @@ body{
 }
 
 .commentList .comment{
-	font-size: 14px;
+	font-size: .26rem;
 	color: #000;
 }
 
@@ -198,7 +268,7 @@ body{
 
 .favourBox .favourItem{
 	margin-right: 5px;
-	font-size: 12px;
+	font-size: .24rem;
 	color: #000;
 }
 
@@ -213,42 +283,43 @@ body{
 
 .comment-input{
 	resize: none;
-	width: 200px;
+	width: 3.8rem;
 	min-height: 50px;
 	overflow-y: visible;
-	line-height: 16px;
+	line-height: .28rem;
 	word-wrap: break-wrap;
-	font-size: 14px;
+	font-size: .24rem;
 	background: #eeeeee;
 	outline: none;
 	margin: 5px 0 5px 0;
 	border: none;
-	padding: 5px;
+	padding: .12rem;
 	position: relative;
 }
 
 .comment-submitBtn{
 	position: absolute;
 	margin-top: 5px;
-	width: 14%;
-	height: 20px;
+	width: .6rem;
+	height: .4rem;
 	text-align: center;
-	line-height: 20px;
-	font-size: 12px;
-	left: 77%;
+	line-height: .4rem;
+	font-size: .24rem;
+	left: 4.1rem;
 	top: 5px;
+	border-radius: 4px;
 	border: 1px solid #000;
 }
 
 .loadBtn{
 	margin-top: 10px;
 	width: 100%;
-	height: 30px;
-	line-height: 30px;
+	height: .8rem;
+	line-height: .8rem;
 	text-align: center;
 	color: #fff;
 	background: #177EE5;
-	font-size: 14px;
+	font-size: .3rem;
 }
 
 .no-content{
@@ -265,7 +336,7 @@ body{
 .head-pic-wrap{
 	position: relative;
 	width: 100%;
-	height: 200px;
+	height: 4rem;
 }
 
 .head-pic-wrap .head-pic{
@@ -275,11 +346,11 @@ body{
 }
 
 .head-pic-wrap .my-potrait-wrap{
-	width: 60px;
-	height: 60px;
+	width: 1.4rem;
+	height: 1.4rem;
 	position: absolute;
-	bottom: -20px;
-	right: 30px;
+	bottom: -0.4rem;
+	right: .4rem;
 	z-index: 10;
 	border: 2px solid #eee;
 }
@@ -292,14 +363,13 @@ body{
 
 .head-pic-wrap .my-name-wrap{
 	position: absolute;
-	height: 20px;
-	line-height: 20px;
+	height: .3rem;
+	line-height: .3rem;
 	color: #fff;
-	font-size: 16px;
+	font-size: .3rem;
 	bottom: 8px;
-	right: 115px;
+	right: 1.9rem;
 }
-
 
 #newTwitter-container{
 	position: relative;
@@ -332,11 +402,11 @@ body{
 
 .submitBtn{
 	position: absolute;
-	height: 30px;
-	line-height: 30px;
-	right: 15px;
-	top: 15px;
-	font-size: 12px;
+	height: .6rem;
+	line-height: .6rem;
+	right: .2rem;
+	top: .2rem;
+	font-size: .3rem;
 	color: #fff;
 }
 
@@ -354,4 +424,35 @@ body{
 	height: 90px;
 	margin: 1px;
 	border: 1px solid #cccccc;
+}
+
+.message{
+  font-size: .24rem;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+}
+
+#fullScreen{
+  position: fixed;
+  display: block;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background: #333;
+}
+
+#fullScreen:after{
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+#fullScreenPic{
+  width: 100%;
+  display: inline-block;
+  vertical-align: middle;
 }

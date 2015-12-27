@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>朋友圈</title>
 </head>
+<script src="https://cdn1.lncld.net/static/js/av-mini-0.6.4.js"></script>
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
 <link rel="stylesheet" type="text/css" href="./css/index.css">
 <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="./css/bootstrap-theme.css">
@@ -16,12 +18,12 @@
     <div class="inner">
         <div id="scroller-content">
             <div id="show-container">
-                <div class="header">
+                <!-- <div class="header">
                     <div class="backBtn" id="backBtn">
                         <img src="./css/rtn.png" class="backBtn-pic">
                     </div>
                     <div class="title">朋友圈</div>
-                </div>
+                </div> -->
                 <div class="head-pic-wrap">
                     <img src="" class="head-pic" id="head-pic">
                     <div class="my-potrait-wrap">
@@ -32,32 +34,34 @@
                 <div id="main-container">
                 </div>
                 <div class="no-content" id="no-content">没有动态</div>
-                <div class="loadBtn" id="loadBtn">加载更多</div>
             </div>
+            <div class="loadBtn" id="loadBtn">加载更多</div>
         </div>
     </div>
 </body>
+<script>
+AV.initialize('H31jJvdeVKIB0XAtdtWd16Im', 'haVT1HU0I3tnWLCSeCnpbwCT');
+</script>
 <script src="./libs/jquery.min.js"></script>
 <script src="./libs/json.js"></script>
 <script src="./libs/iscroll.js"></script>
 <script src="./libs/underscore.js"></script>
 <script src="./libs/bootstrap.min.js"></script>
 <script src="myMoments.js"></script>
-<script src="./libs/dropload.min.js"></script>
+<script src="./libs/pulltorefresh.js"></script>
 <script type="text/javascript">
-// dropload
-var dropload = $('.inner').dropload({
-    domUp: {
-        domClass: 'dropload-up',
-        domRefresh: '<div class="dropload-refresh">↓下拉刷新</div>',
-        domUpdate: '<div class="dropload-update">↑释放更新</div>',
-        domLoad: '<div class="dropload-load"><span class="loading"></span>加载中...</div>'
-    },
-    loadUpFn: function(me) {
-        setTimeout(function() {
-            window.location.reload();
-        }, 1000);
-    }
+var pulgin = $('.inner').pullToRefresh({
+  distance: 60,
+  msg: {
+    pullText: '下拉刷新...', // 如果用组件默认的template，可以自定义文案
+    releaseText: '松开刷新   ',
+    loadingText: '正在加载...'
+  },
+  callback: function() {
+    setTimeout(function() {
+      window.location.reload();
+    }, 1000);
+  }
 });
 </script>
 

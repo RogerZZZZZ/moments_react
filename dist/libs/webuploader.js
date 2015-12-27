@@ -1913,7 +1913,7 @@
                         runtimeOrder: opts.runtimeOrder,
                         id: this
                     });
-    
+
                     picker = new FilePicker( options );
     
                     picker.once( 'ready', deferred.resolve );

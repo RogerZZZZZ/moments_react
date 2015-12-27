@@ -84,10 +84,11 @@ jQuery(function() {
         disableGlobalDnd: true,
 
         chunked: true,
-        server: window.ipAddress + ':8080/moments/fileupload.php',
+        server: window.ipAddress + ':8080/avmoments/fileupload.php',
         fileNumLimit: 300,
-        fileSizeLimit: 10 * 1024 * 1024, // 200 M
-        fileSingleSizeLimit: 3 * 1024 * 1024 // 50 M
+        sendAsBinary: true,
+        fileSizeLimit: 100 * 1024 * 1024, // 200 M
+        fileSingleSizeLimit: 100 * 1024 * 1024 // 50 M
     });
 
     // 添加“添加文件”的按钮，
@@ -306,7 +307,7 @@ jQuery(function() {
                 stats = uploader.getStats();
                 if (stats.successNum) {
                     ajaxLoc({
-                        url: window.ipAddress + ':8080/moments/addmoments?username=' + window.username + '&time=' + (new Date()).getTime() + '&content=' + $('#twitterInput').val() + '&image=' + window.addFileSrc + '&tempimage=' + window.delteFileSrc,
+                        url: window.ipAddress + ':8080/avmoments/addmoments?username=' + window.username + '&time=' + (new Date()).getTime() + '&content=' + $('#twitterInput').val() + '&image=' + window.addFileSrc + '&tempimage=' + window.delteFileSrc,
                         success: function(rst) {
                             window.location.reload();
                         },

@@ -30,7 +30,7 @@
 
 #uploader .placeholder {
     min-height: 150px;
-    padding-top: 178px;
+    padding-top: 3rem;
     text-align: center;
     background: url(../images/image.png) center 93px no-repeat;
     color: #cccccc;
@@ -40,13 +40,14 @@
 
 .placeholder .webuploader-container{
     position: relative;
-    width: 50%;
-    margin: 10px auto;
-    height: 50px;
+    width: 2.4rem;
+    margin: .26rem auto;
+    height: .5rem;
+    line-height: .5rem;
 }
 
 #uploader .placeholder .webuploader-pick {
-    font-size: 14px;
+    font-size: .3rem;
     background: #00b7ee;
     border-radius: 3px;
     line-height: 44px;

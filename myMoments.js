@@ -3,19 +3,20 @@ var React = require('react/addons');
 
 window.username = getQueryString('username');
 window.ipAddress = getQueryString('ipAddress');
+window.trueName = getQueryString('trueName');
 window.page = 1;
 
 var ContentArea = React.createClass({displayName: "ContentArea",
 	getInitialState: function(){
 		return {
 			data: null
-		}
+		};
 	},
 
 	componentDidMount: function(){
 		var self = this;
 		ajaxLoc({
-			url: window.ipAddress + ':8080/moments/mymoments?username='+window.username+'&start=0&size=5',
+			url: window.ipAddress + ':8080/avmoments/mymoments?username='+window.username+'&start=0&size=5&truename='+window.trueName,
 			success:function(rst){
 				console.log(rst);
 				if (self.isMounted()){
@@ -30,7 +31,7 @@ var ContentArea = React.createClass({displayName: "ContentArea",
 	handleLoadMore: function(){
 		var self = this;
 		ajaxLoc({
-			url: window.ipAddress + ':8080/moments/mymoments?username='+window.username+'&start='+window.page*5+'&size=5',
+			url: window.ipAddress + ':8080/avmoments/mymoments?username='+window.username+'&start='+window.page*5+'&size=5&truename='+window.trueName,
 			success:function(rst){
 				self.setState({
 					moreData : rst
@@ -47,7 +48,7 @@ var ContentArea = React.createClass({displayName: "ContentArea",
 		}else{
 			var twitterItem = null;
 		}
-				
+
 		return React.createElement("div", null, 
 			twitterItem
 		);
@@ -69,7 +70,7 @@ var MoreContentArea = React.createClass({displayName: "MoreContentArea",
 		}else{
 			var twitterItem = null;
 		}
-				
+
 		return React.createElement("div", null, 
 			twitterItem
 		);
@@ -94,15 +95,15 @@ var Twitter = React.createClass({displayName: "Twitter",
 		var day = Math.floor(timeDiff/(3600*24));
 		var hour = Math.floor(timeDiff/3600);
 		var minute = Math.floor(timeDiff/60);
-		if(year != 0){
+		if(year > 0){
 			time = year + '年前';
-		}else if(month != 0){
+		}else if(month > 0){
 			time = month + '月前';
-		}else if(day != 0){
+		}else if(day > 0){
 			time = day + '天前';
-		}else if(hour != 0){
+		}else if(hour > 0){
 			time = hour + '小时前';
-		}else if(minute != 0){
+		}else if(minute > 0){
 			time = minute + '分钟前';
 		}else{
 			time = '刚刚';
@@ -124,7 +125,7 @@ var Twitter = React.createClass({displayName: "Twitter",
 		var btnStatus = event.target.className;
 		if(btnStatus == 'favourBtn'){
 			ajaxLoc({
-				url: window.ipAddress + ':8080/moments/delfavour?username='+window.username+'&mid='+ this.state.data.id,
+				url: window.ipAddress + ':8080/avmoments/delfavour?username='+window.trueName+'&mid='+ this.state.data.id,
 				success:function(rst){
 					self.setState({
 						data: rst[0]
@@ -136,7 +137,7 @@ var Twitter = React.createClass({displayName: "Twitter",
 			});
 		}else if(btnStatus == 'not-favourBtn'){
 			ajaxLoc({
-				url: window.ipAddress + ':8080/moments/addfavour?username='+window.username+'&mid='+ this.state.data.id,
+				url: window.ipAddress + ':8080/avmoments/addfavour?username='+window.trueName+'&mid='+ this.state.data.id,
 				success:function(rst){
 					self.setState({
 						data: rst[0]
@@ -156,7 +157,7 @@ var Twitter = React.createClass({displayName: "Twitter",
 			return;
 		}
 		ajaxLoc({
-			url: window.ipAddress + ':8080/moments/addcomment?mid='+self.state.data.id+'&from='+window.username+'&to='+$(this.refs.sendCommentBtn).attr('name')+'&content='+inputVal,
+			url: window.ipAddress + ':8080/avmoments/addcomment?mid='+self.state.data.id+'&from='+window.trueName+'&to='+$(this.refs.sendCommentBtn).attr('name')+'&content='+inputVal,
 			success:function(rst){
 				self.setState({
 					data: rst[0]
@@ -167,7 +168,7 @@ var Twitter = React.createClass({displayName: "Twitter",
 			}
 		});
 		$(this.refs.inputVal).val('');
-		$(this.refs.commentInputWrap).hide()	
+		$(this.refs.commentInputWrap).hide()
 	},
 
 	sendComment: function(event){
@@ -186,7 +187,7 @@ var Twitter = React.createClass({displayName: "Twitter",
 		$(this.refs.commentSubmitBtn).one('click', function(){
 			var inputVal = $(self.refs.inputVal).val();
 			ajaxLoc({
-				url: window.ipAddress + ':8080/moments/addcomment?mid='+self.state.data.id+'&from='+window.username+'&to='+toName+'&content='+inputVal,
+				url: window.ipAddress + ':8080/avmoments/addcomment?mid='+self.state.data.id+'&from='+window.trueName+'&to='+toName+'&content='+inputVal,
 				success:function(rst){
 					self.setState({
 						data: rst[0]
@@ -202,6 +203,31 @@ var Twitter = React.createClass({displayName: "Twitter",
 
 	},
 
+	isAbleToDelete: function(){
+		if(window.username === window.trueName){
+			return (
+				React.createElement("span", {className: "delete-wrap", onClick: this.deleteTwitter}, "删除")
+				)
+		}else{
+			return null;
+		}
+	},
+
+	deleteTwitter: function(){
+		var self = this;
+		ajaxLoc({
+			url: window.ipAddress + ':8080/avmoments/delmoment?id='+ self.state.data.id,
+			success:function(rst){
+				if(rst === 1){
+					window.location.reload();
+				}
+			},
+			error: function(rst){
+				console.log(rst);
+			}
+		});
+	},
+
 	render: function(){
 		var timeDiff = this.getTimeFun();
 		var twitterInfo = this.state.data;
@@ -211,7 +237,7 @@ var Twitter = React.createClass({displayName: "Twitter",
 				React.createElement("img", {className: "potrait-pic", src: "./css/defaulthead.png"})
 			), 
 			React.createElement("div", {className: "content-wrap"}, 
-				React.createElement("span", {className: "name-wrap"}, twitterInfo.username), 
+				React.createElement("span", {className: "name-wrap"}, twitterInfo.realname), 
 				React.createElement("div", {className: "text-wrap"}, 
 					twitterInfo.content
 				), 
@@ -222,6 +248,9 @@ var Twitter = React.createClass({displayName: "Twitter",
 					React.createElement("span", {className: "time-wrap", name: twitterInfo.time}, 
 						timeDiff
 					), 
+
+					this.isAbleToDelete(), 
+
 					React.createElement("div", {className: status, id: "favourBtn", onClick: this.handleFavour}, "赞"), 
 					React.createElement("div", {className: "commentBtn", ref: "sendCommentBtn", onClick: this.sendComment, name: twitterInfo.username}, "评论")
 				), 
@@ -234,7 +263,7 @@ var Twitter = React.createClass({displayName: "Twitter",
 				), 
 
 				React.createElement(CommentBox, {commentData: twitterInfo.comment, submitComment: this.sendCommentToPerson}
-				)		
+				)
 			)
 		)
 		)
@@ -248,12 +277,24 @@ var ImageBox = React.createClass({displayName: "ImageBox",
 		}
 	},
 
+	showFullScreen: function(e){
+		var imgSrc = e.target.src;
+		var imgItem = $("<div id='fullScreen'><img src="+imgSrc+" id='fullScreenPic'/></div>");
+		$("body").append(imgItem);
+		imgItem.on('click', function(){
+			$(this).remove();
+		});
+	},
+
 	render: function(){
-		if(this.state.data != ''){
+		var self = this;
+		if(this.state.data != '' && this.state.data != undefined){
 			var tmpStr = this.state.data.substring(1, this.state.data.length);
 			var tmpArr = tmpStr.split('@');
 			var imgItem = tmpArr.map(function(imgInfo){
-				return React.createElement("img", {src: window.ipAddress + ':8080/moments/upload/' +imgInfo, className: "imgItem"});
+				if(imgInfo != undefined && imgInfo != 'ull' && imgInfo != '' && imgInfo != 'null'){
+					return React.createElement("img", {onClick: self.showFullScreen, src: window.ipAddress + ':8080/SentimentControl/upload/'+imgInfo, className: "imgItem"});
+				}
 			});
 		}else{
 			var imgItem = null;
@@ -286,9 +327,9 @@ var CommentBox = React.createClass({displayName: "CommentBox",
 var CommentList = React.createClass({displayName: "CommentList",
     render: function() {
     	var submitComment = this.props.submitComment;
-        var commentNodes = this.props.data.map(function(comment) {
+        var commentNodes = this.props.data == undefined ? null: this.props.data.map(function(comment) {
             return (
-                React.createElement(Comment, {from: comment.from, to: comment.to, content: comment.content, submitComment: submitComment}
+                React.createElement(Comment, {to: comment.to, content: comment.content, submitComment: submitComment, from: comment.from, fromreal: comment.fromreal, toreal: comment.toreal}
                 )
             );
         });
@@ -307,11 +348,19 @@ var Comment = React.createClass({displayName: "Comment",
 		this.props.submitComment(toName);
 	},
 
+	showCommentItem: function(fromName, toName, fromReal, toReal, content){
+		if((fromName == window.username && toName == window.username) || fromName == toName){
+			return fromReal + ' : ' + content;
+		}else{
+			return fromReal + ' 回复 ' + toReal + ' : ' + content;
+		}
+	},
+
     render: function() {
         return (
             React.createElement("div", {className: "comment"}, 
                 React.createElement("div", {className: "commentAuthor", onClick: this.submitCommentBridge, to: this.props.from, name: this.props.from}, 
-                    this.props.from, " to ", this.props.to, " : ", this.props.content
+										this.showCommentItem(this.props.from, this.props.to, this.props.fromreal, this.props.toreal, this.props.content)
                 )
             )
         );
@@ -345,7 +394,7 @@ var FavourBox = React.createClass({displayName: "FavourBox",
 		}else{
 			var favourItem = null;
 		}
-		
+
 		return (React.createElement("div", {className: "favourBox"}, 
 			favourItem
 			))
@@ -355,14 +404,21 @@ var FavourBox = React.createClass({displayName: "FavourBox",
 init();
 
 $('#backBtn').on('click', function(){
-	window.location.href = 'friend-circle.html?username='+window.username+'&ipAddress='+window.ipAddress;
+	window.location.href = 'friend-circle.html?username='+window.trueName+'&ipAddress='+window.ipAddress;
 });
 
 
 function init(){
 	var randomNum = getRandomNum(5);
 	$('#head-pic').attr('src', './css/top'+randomNum+'.png');
-	$('#myName').text(window.username);
+	// $('#myName').text(window.username);
+
+	ajaxLoc({
+		url: window.ipAddress + ':8080/avmoments/getrealname?username='+window.username,
+		success:function(rst){
+			$('#myName').text(rst);
+		}
+	});
 
 	$('#loadBtn').on('click', function(){
 		var page = window.page;
@@ -370,7 +426,7 @@ function init(){
 		moreContentWrap.className = 'moreContent-container';
 		document.getElementById('show-container').appendChild(moreContentWrap);
 		ajaxLoc({
-			url: window.ipAddress + ':8080/moments/moments?username='+window.username+'&start='+window.page*5+'&size=5',
+			url: window.ipAddress + ':8080/avmoments/moments?username='+window.username+'&start='+window.page*5+'&size=5',
 			success:function(rst){
 				React.render(React.createElement(MoreContentArea, {data: rst}), $('.moreContent-container')[page - 1]);
 				window.page++;
