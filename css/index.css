@@ -269,7 +269,7 @@ img {
 .favourBox .favourItem{
 	margin-right: 5px;
 	font-size: .24rem;
-	color: #000;
+	color: #235a81;
 }
 
 .commentInput-wrap{
@@ -455,4 +455,8 @@ img {
   width: 100%;
   display: inline-block;
   vertical-align: middle;
+}
+
+.commentUser{
+  color: #235a81;
 }

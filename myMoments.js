@@ -228,13 +228,38 @@ var Twitter = React.createClass({displayName: "Twitter",
 		});
 	},
 
+	getImgSrc: function(){
+		var currentUser = this.state.data.username;
+		var self = this;
+		AV.Query.doCloudQuery("select avatar from _User where username = '" + currentUser + "'", {
+			success: function(result){
+				var fileId = result.results[0].attributes.avatar.id;
+				AV.Query.doCloudQuery("select url from _File where objectId = '" + fileId + "'", {
+					success: function(results){
+						$(self.refs.protraitImg).attr('src', '' + results.results[0].attributes.url);
+						},
+						error: function(errors){
+							//查询失败，查看 error
+							console.dir(errors);
+						}
+					});
+				},
+			error: function(error){
+				//查询失败，查看 error
+				console.dir(error);
+			}
+		});
+	},
+
 	render: function(){
+		var self = this;
 		var timeDiff = this.getTimeFun();
 		var twitterInfo = this.state.data;
 		var status = this.isLikingThisOne(twitterInfo.isfavoured);
 		return (React.createElement("div", {className: "wrap"}, 
 			React.createElement("div", {className: "potrait-wrap"}, 
-				React.createElement("img", {className: "potrait-pic", src: "./css/defaulthead.png"})
+				React.createElement("img", {className: "potrait-pic", ref: "protraitImg", src: "./css/defaulthead.png"}), 
+				self.getImgSrc()
 			), 
 			React.createElement("div", {className: "content-wrap"}, 
 				React.createElement("span", {className: "name-wrap"}, twitterInfo.realname), 
@@ -348,19 +373,25 @@ var Comment = React.createClass({displayName: "Comment",
 		this.props.submitComment(toName);
 	},
 
-	showCommentItem: function(fromName, toName, fromReal, toReal, content){
-		if((fromName == window.username && toName == window.username) || fromName == toName){
-			return fromReal + ' : ' + content;
-		}else{
-			return fromReal + ' 回复 ' + toReal + ' : ' + content;
-		}
-	},
-
     render: function() {
+			var blocks = [];
+			if((this.props.from == window.username && this.props.to == window.username) || this.props.from == this.props.to){
+				blocks.push(React.createElement("div", null, 
+				React.createElement("span", {className: "commentUser"}, this.props.fromreal), 
+				React.createElement("span", null, " : ", this.props.content)
+			));
+			}else{
+				blocks.push(React.createElement("div", null, 
+					React.createElement("span", {className: "commentUser"}, this.props.fromreal), 
+					React.createElement("span", null, " 回复 "), 
+					React.createElement("span", {className: "commentUser"}, this.props.toreal), 
+					React.createElement("span", null, " : ", this.props.content)
+					));
+			}
         return (
             React.createElement("div", {className: "comment"}, 
                 React.createElement("div", {className: "commentAuthor", onClick: this.submitCommentBridge, to: this.props.from, name: this.props.from}, 
-										this.showCommentItem(this.props.from, this.props.to, this.props.fromreal, this.props.toreal, this.props.content)
+										blocks
                 )
             )
         );
@@ -409,6 +440,26 @@ $('#backBtn').on('click', function(){
 
 
 function init(){
+	AV.Query.doCloudQuery("select avatar from _User where username = '" + window.username + "'", {
+  success: function(result){
+		var fileId = result.results[0].attributes.avatar.id;
+		AV.Query.doCloudQuery("select url from _File where objectId = '" + fileId + "'", {
+			success: function(results){
+				// console.log(results.results[0].attributes.url);
+				$('#my-potrait-pic').attr('src', results.results[0].attributes.url)
+				},
+				error: function(errors){
+					//查询失败，查看 error
+					console.dir(errors);
+				}
+			});
+  	},
+  error: function(error){
+    //查询失败，查看 error
+    console.dir(error);
+  }
+});
+
 	var randomNum = getRandomNum(5);
 	$('#head-pic').attr('src', './css/top'+randomNum+'.png');
 	// $('#myName').text(window.username);

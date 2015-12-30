@@ -27,7 +27,6 @@ var ContentArea = React.createClass({
 							queryString2.find().then(function(result){
 								var friendArray2 = createFriendArray(result, false);
 								friendArray = friendArray2 + friendArray;
-								// console.log("--->"+friendArray);
 								ajaxLoc({
 									url: window.ipAddress + ":8080/avmoments/moments?username="+friendArray+"&start=0&size=5&truename="+window.username,
 									success:function(rst){
@@ -254,14 +253,40 @@ var Twitter = React.createClass({
 		});
 	},
 
+	getImgSrc: function(){
+		var currentUser = this.state.data.username;
+		var self = this;
+
+		AV.Query.doCloudQuery("select avatar from _User where username = '" + currentUser + "'", {
+			success: function(result){
+				var fileId = result.results[0].attributes.avatar.id;
+				AV.Query.doCloudQuery("select url from _File where objectId = '" + fileId + "'", {
+					success: function(results){
+							$(self.refs.protraitImg).attr('src', '' + results.results[0].attributes.url);
+						},
+						error: function(errors){
+							//查询失败，查看 error
+							console.dir(errors);
+						}
+					});
+				},
+			error: function(error){
+				//查询失败，查看 error
+				console.dir(error);
+			}
+		});
+	},
+
 	render: function(){
+		var self = this;
 		var timeDiff = this.getTimeFun();
 		var twitterInfo = this.state.data;
 		var status = this.isLikingThisOne(twitterInfo.isfavoured);
 
 		return (<div className="wrap">
 			<div className="potrait-wrap" onClick={this.toMyMoments}>
-				<img className="potrait-pic" src="./css/defaulthead.png" />
+				<img className="potrait-pic" ref="protraitImg" src="./css/defaulthead.png" />
+				{self.getImgSrc()}
 			</div>
 			<div className="content-wrap">
 				<span className="name-wrap">{twitterInfo.realname}</span>
@@ -375,24 +400,30 @@ var Comment = React.createClass({
 		this.props.submitComment(toName);
 	},
 
-	showCommentItem: function(fromName, toName, fromReal, toReal, content){
-		if((fromName == window.username && toName == window.username) || fromName == toName){
-			return fromReal + ' : ' + content;
-		}else{
-			return fromReal + ' 回复 ' + toReal + ' : ' + content;
-		}
-	},
     render: function() {
+			var blocks = [];
+			if((this.props.from == window.username && this.props.to == window.username) || this.props.from == this.props.to){
+				blocks.push(<div>
+				<span className="commentUser">{this.props.fromreal}</span>
+				<span> : {this.props.content}</span>
+			</div>);
+			}else{
+				blocks.push(<div>
+					<span className="commentUser">{this.props.fromreal}</span>
+					<span> 回复 </span>
+					<span className="commentUser">{this.props.toreal}</span>
+					<span> : {this.props.content}</span>
+					</div>);
+			}
         return (
             <div className="comment">
                 <div className="commentAuthor" onClick={this.submitCommentBridge} to={this.props.from} name={this.props.from}>
-										{this.showCommentItem(this.props.from, this.props.to, this.props.fromreal, this.props.toreal, this.props.content)}
+										{blocks}
                 </div>
             </div>
         );
     }
 });
-
 var FavourBox = React.createClass({
 	getInitialState: function(){
 		if(this.props.favourData != undefined){
@@ -430,17 +461,25 @@ var FavourBox = React.createClass({
 init();
 
 function init(){
-	// $('#newTwitterBtn').on('click', function(){
-	// 	$('#show-container').hide();
-	// 	$('#loadBtn').hide();
-	// 	$('#container').show();
-	// 	$('#newTwitter-container').show();
-	// 	$('#post-container').show();
-	// });
-
-	// $('#backBtn').on('click', function(){
-	// 	window.location.reload();
-	// });
+	AV.Query.doCloudQuery("select avatar from _User where username = '" + window.username + "'", {
+  success: function(result){
+		var fileId = result.results[0].attributes.avatar.id;
+		AV.Query.doCloudQuery("select url from _File where objectId = '" + fileId + "'", {
+			success: function(results){
+				// console.log(results.results[0].attributes.url);
+				$('#my-potrait-pic').attr('src', results.results[0].attributes.url)
+				},
+				error: function(errors){
+					//查询失败，查看 error
+					console.dir(errors);
+				}
+			});
+  	},
+  error: function(error){
+    //查询失败，查看 error
+    console.dir(error);
+  }
+});
 
 	$('.my-potrait-wrap').on('click', function(){
 		window.location.href = 'myMoments.html?username='+window.username+'&ipAddress='+window.ipAddress+'&trueName='+window.username;
@@ -470,14 +509,6 @@ function init(){
 			}
 		});
 	});
-
-	// $('.imgItem').on('click', function(){
-	// 	var imgSrc = $(this).attr('src');
-	// 	console.log(imgSrc);
-	// 	var fullScreen = $("<div id='fullScreen'><img src=imgSrc id='fullScreenPic'/></div>");
-	// 	$(body).appendChild(fullScreen);
-	// });
-
 }
 
 function getRandomNum(maxNum){
