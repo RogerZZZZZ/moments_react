@@ -21350,18 +21350,43 @@ function init(){
 		}
 	});
 
-	$('#loadBtn').on('click', function(){
-		var page = window.page;
-		var moreContentWrap = document.createElement('div');
-		moreContentWrap.className = 'moreContent-container';
-		document.getElementById('show-container').appendChild(moreContentWrap);
-		ajaxLoc({
-			url: window.ipAddress + ':8080/avmoments/moments?username='+friendArray+'&start='+window.page*5+'&size=5&truename='+window.username,
-			success:function(rst){
-				React.render(React.createElement(MoreContentArea, {data: rst}), $('.moreContent-container')[page - 1]);
-				window.page++;
-			}
-		});
+	// $('#loadBtn').on('click', function(){
+	// 	var page = window.page;
+	// 	var moreContentWrap = document.createElement('div');
+	// 	moreContentWrap.className = 'moreContent-container';
+	// 	document.getElementById('show-container').appendChild(moreContentWrap);
+	// 	ajaxLoc({
+	// 		url: window.ipAddress + ':8080/avmoments/moments?username='+friendArray+'&start='+window.page*5+'&size=5&truename='+window.username,
+	// 		success:function(rst){
+	// 			React.render(<MoreContentArea data={rst}/>, $('.moreContent-container')[page - 1]);
+	// 			window.page++;
+	// 		}
+	// 	});
+	// });
+
+	$('.inner').dropload({
+		scrollArea : window,
+		loadDownFn : function(me){
+			var page = window.page;
+			var moreContentWrap = document.createElement('div');
+			moreContentWrap.className = 'moreContent-container';
+			document.getElementById('show-container').appendChild(moreContentWrap);
+			ajaxLoc({
+				url: window.ipAddress + ':8080/avmoments/moments?username='+friendArray+'&start='+window.page*5+'&size=5&truename='+window.username,
+				success:function(rst){
+					React.render(React.createElement(MoreContentArea, {data: rst}), $('.moreContent-container')[page - 1]);
+					window.page++;
+					setTimeout(function(){
+							me.resetload();
+					},1000);
+				},
+				error: function(){
+					me.lock();
+					// me.noData();
+					$('.dropload-load').removeClass('dropload-load').addClass('dropload-noData').text('无动态');
+				}
+			});
+		}
 	});
 }
 
